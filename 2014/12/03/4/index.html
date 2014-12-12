@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>javascript模式-笔记 | Charley</title>
+  <meta name="author" content="Charley">
+  
+  <meta name="description" content="Some need to write,Some need to read.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="javascript模式-笔记"/>
+  <meta property="og:site_name" content="Charley"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Charley" type="application/atom+xml">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-368771XX-X']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <nav id="main-nav">
+  <ul class='container'>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+  </header>
+  <div id="content" class="container">
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+      <time datetime="2014-12-03T07:44:01.000Z"><a href="/2014/12/03/4/">周三, 12月 3 2014, 3:44:01 下午</a></time>
+
+  
+    <h1 class="title">javascript模式-笔记</h1>
+  
+
+
+
+<div class="clear"></div>
+      
+    </header>
+    <div class="entry">
+      
+        <h2 id="简介">简介</h2>
+<p>模式是解决某一通用问题的模板，不仅仅是一个可以用来复制粘贴的代码解决方案，更多的是提供一个更好的实践经验、有用的抽象化表示和解决一类问题的模板。  </p>
+<h5 id="例如:">例如:</h5>
+<ul>
+<li>通过<code>strict</code>模式实现向后兼容</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">()</span></span>{  </div><div class="line"><span class="pi">  "use strict"</span>;  </div><div class="line">  <span class="comment">//函数的其他部分...  </span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>console</code>对象来代替弹出<code>alert()</code>消息或刷新页面</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="基本技巧">基本技巧</h2>
+<h5 id="尽量少用全局变量">尽量少用全局变量</h5>
+<ul>
+<li>未声明的变量定义后，转为全局变量。  </li>
+<li>另一种创建隐式全局变量的反模式是带有<code>var</code>声明的链式赋值。  </li>
+<li>在ES5中，没有声明的变量赋值会抛出错误。  </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> global_var1 = <span class="number">1</span>;</div><div class="line">global_var2 = <span class="number">2</span>;<span class="comment">//反模式  </span></div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span>  </span>{  </div><div class="line">  global_var3 = <span class="number">3</span>;<span class="comment">//反模式</span></div><div class="line">}());</div><div class="line"><span class="comment">//企图删除</span></div><div class="line"><span class="keyword">delete</span> global_var1;</div><div class="line"><span class="keyword">delete</span> global_var2;</div><div class="line"><span class="keyword">delete</span> global_var3;</div><div class="line"><span class="comment">//测试删除情况</span></div><div class="line"><span class="keyword">typeof</span> global_var1; <span class="comment">//number</span></div><div class="line"><span class="keyword">typeof</span> global_var2; <span class="comment">//undefined</span></div><div class="line"><span class="keyword">typeof</span> global_var3; <span class="comment">//undefined</span></div></pre></td></tr></table></figure>
+
+<h5 id="单一Var模式">单一Var模式</h5>
+<p>只使用一个var在函数顶部进行变量声明的好处在于</p>
+<ul>
+<li>提供一个单一的地址以查找到函数所需要的所有局部变量</li>
+<li>防止出现变量在未定义前就被使用出现的逻辑错误</li>
+<li>帮助牢记要声明的变量，以减少全局变量</li>
+<li>更少的编码  </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>,</div><div class="line">  b = <span class="number">2</span>,</div><div class="line">  sum = a + b,</div><div class="line">  myobject = {},</div><div class="line">  i,</div><div class="line">  j;</div><div class="line">  <span class="comment">//函数体...</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>JavaScript允许在函数的任意位置声明变量，无论在哪里声明，效果都等同于在函数顶部声明。  </p>
+<h5 id="For循环模式">For循环模式</h5>
+<p>好的for循环模式是将已经循环过的数组（或容器）的长度缓存起来。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,max=array.length;i&lt;max;i++){</div><div class="line">  <span class="comment">//对array[i]的操作...</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>对于循环的最后一个改进是用<code>i++</code>替代<code>i=i+1</code>和<code>i+=1</code>,对此引入了一些细微操作</p>
+<ul>
+<li>使用最少的变量</li>
+<li>逐步减小到0，这样运算通常更快，因为同0比较比同数组的长度比较更有效率。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第一个修改后的模式为</span></div><div class="line"><span class="keyword">var</span> i,myarray=[];</div><div class="line"><span class="keyword">for</span>(i=myarray.length;i--;){</div><div class="line">  <span class="comment">//处理myarray[i]...</span></div><div class="line">}</div><div class="line"><span class="comment">//第二个使用while循环</span></div><div class="line"><span class="keyword">var</span> myarray[],</div><div class="line">i = myarray.length;</div><div class="line"><span class="keyword">while</span>(i--){</div><div class="line">  <span class="comment">//处理myarray[i]...</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h5 id="避免使用隐式类型转换">避免使用隐式类型转换</h5>
+<p>JavaScript在使用比较语句时会执行隐式类型转换，所以在比较时需用<code>===``!===</code>替换<code>==``!==</code></p>
+<h5 id="构造函数的首字母大写">构造函数的首字母大写</h5>
+<p>首字母小写的函数名和方法表明这些函数和方法不能使用new来调用。故在命名时，对于构造函数用大驼峰命名法<code>MyConstruct</code>，对于“普通”函数和方法名用小驼峰命名法<code>myFunction``myMethod</code>。</p>
+<h2 id="字面量和构造函数">字面量和构造函数</h2>
+<h5 id="自定义构造函数">自定义构造函数</h5>
+<p>当以<code>new</code>操作符调用构造函数时，函数内部发生以下情况：</p>
+<ul>
+<li>创建空对象，并且this变量引用该对象，同时还继承该对象的原型</li>
+<li>属性和方法加入到this引用的原型汉中</li>
+<li>新创建的对象由this所引用，并且最后隐式地返回this(如果没有显示地返回其他对象)  </li>
+</ul>
+<p>其影响是调用构造函数时，都会在内存中创建完整的对象及<code>函数或方法</code>。为了提高效率，更好的方法是将方法添加到<code>prototype</code>类的原型中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">objectName.prototype.methodName = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">return</span> somevalue;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h5 id="自调用构造函数以防止new操作符的漏写">自调用构造函数以防止new操作符的漏写</h5>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">*举个栗子</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Waffle</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">if</span>(!(<span class="keyword">this</span> <span class="keyword">instanceof</span> Waffle)){</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Waffle();</div><div class="line">  }</div><div class="line">  <span class="keyword">this</span>.taste = <span class="string">"yummy"</span>;</div><div class="line">}</div><div class="line">Waffle.prototype.wantAnother = <span class="literal">true</span>;</div><div class="line"><span class="comment">//测试</span></div><div class="line"><span class="keyword">var</span> first = <span class="keyword">new</span> Waffle();</div><div class="line">second = Waffle();</div><div class="line"><span class="built_in">console</span>.log(first.taste);         <span class="comment">//"yummy"</span></div><div class="line"><span class="built_in">console</span>.log(second.taste);       <span class="comment">//"yummy"</span></div><div class="line"><span class="built_in">console</span>.log(first.wantAnother);   <span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(second.wantAnother);  <span class="comment">//true</span></div><div class="line"><span class="comment">/*</span></div><div class="line">*方法的另一种方式是将其与argument.callee比较</div><div class="line">*/</div><div class="line"><span class="keyword">if</span>(!<span class="keyword">this</span> <span class="keyword">instanceof</span> argument.callee){</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> argument.callee();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h5 id="正确使用JSON">正确使用JSON</h5>
+<p>在JSON字符串中，不能使用函数或正则表达式字符串，也不推荐eval()对任意JSON字符串进行求值。使用<code>JSON.parse()</code>解析字符串（jQury中存在一个<code>parseJSON()</code>方法），使用<code>JSON.stringify()</code>将任一对象或数组（或基本数据类型）序列化为一个JSON字符串。  </p>
+<h5 id="基本值类型包装器">基本值类型包装器</h5>
+<p>JavaScript有五个基本的类型值：数字、字符串、布尔、null和undefined。除了null和undefined以外，其他三个基本类型值都具有所谓的基本包装对象，即可以使用<code>Number()</code> <code>String()</code> <code>Boolean()</code>创建包装对象。通过创建包装对象，可以更好地利用一些特定方法，使基本值类型更具扩充性。</p>
+<h2 id="函数">函数</h2>
+<h5 id="返回函数">返回函数</h5>
+<p>函数也是对象，因此他们可以用作返回值。这表明一个函数可以不以其计算数据值或数据数组作为其执行结果返回。函数可以返回另一个更专门的函数，也可以按需创建个函数，这取决于其输入。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">*举个栗子</div><div class="line">*/</div><div class="line"><span class="keyword">var</span> setup = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">    <span class="keyword">return</span> (count+=<span class="number">1</span>);</div><div class="line">  }</div><div class="line">}</div><div class="line"><span class="comment">//用法</span></div><div class="line"><span class="keyword">var</span> next = <span class="keyword">new</span> setup();</div><div class="line">next();     <span class="comment">//返回1</span></div><div class="line">next();     <span class="comment">//返回2</span></div></pre></td></tr></table></figure>
+
+<p>由于setup包装了返回函数，它创建了一个闭包，可以使用这个闭包使用一些私有数据，而这些私有数据仅能被返回函数使用，外部代码却无法访问。故每次调用该函数时，它返回一个递增的值。</p>
+<h5 id="即时函数">即时函数</h5>
+<p>即时函数模式是一种支持在函数定义后即时执行该函数的语法。示例如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//jslint偏好的一种写法</span></div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="comment">//code here...</span></div><div class="line">}());</div><div class="line"><span class="comment">//另一种写法，注意最后一个括号位置</span></div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="comment">//code here...</span></div><div class="line">})();</div></pre></td></tr></table></figure>
+
+<p>这种模式的用处是将其中的所有代码包装到它的局部作用域中，且不会将任何变量泄露到全局作用域中。<br>    也可以将参数传递到即时函数中，一般情况下，全局对象是以参数形式传递给即时函数的，以便于在不使用Window指定全局作用域限定的情况下可以在函数内部访问该对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">(global)</span></span>{</div><div class="line">  <span class="comment">//code here...</span></div><div class="line">  }(global));</div></pre></td></tr></table></figure>
+
+<p>延伸内容阅读即时对象初始化。<br>Curry暂时略读。</p>
+<h2 id="对象创建模式">对象创建模式</h2>
+<h5 id="私有属性和方法">私有属性和方法</h5>
+<p>JavaScript语言没有私有成员的特殊语法，但可以通过闭包实现这个功能。<br>      通过构造函数创建一个闭包，在闭包范围内的任意变量都不会暴露给构造函数以外的代码。<br>      但这些私有变量仍可以用于公共方法中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Gadget</span><span class="params">()</span></span>{</div><div class="line">  <span class="comment">//private</span></div><div class="line">  <span class="keyword">var</span> name = <span class="string">"ipod"</span>;</div><div class="line">  <span class="comment">//public</span></div><div class="line">  <span class="keyword">this</span>.getName = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">    <span class="keyword">return</span> name;</div><div class="line">  }</div><div class="line">}</div><div class="line"><span class="keyword">var</span> toy = <span class="keyword">new</span> Gadget();</div><div class="line">sonsole.log(toy.name);      <span class="comment">//undefine</span></div><div class="line">sonsole.log(toy.getName())  <span class="comment">//"ipod"</span></div></pre></td></tr></table></figure>
+
+<p>也可以用即时函数实现，还可以用模块模式实现。  </p>
+<p>待续！</p>
+
+      
+    </div>
+    <footer>
+      
+          
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <span class="jiathis_txt">分享到：</span>
+  <a class="jiathis_button_weixin">微信</a>
+  <a class="jiathis_button_tsina">新浪微博</a>
+  <a class="jiathis_button_renren">人人网</a>
+  <a class="jiathis_button_qzone">QQ空间</a>
+  <a class="jiathis_button_douban">豆瓣</a>
+  <a class="jiathis_button_pocket">Pocket</a>
+  <a href="http://www.jiathis.com/share?uid=901656" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=901656" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+          <div class="clearfix"></div>
+          <nav id="pagination">
+  
+    <a href="/2014/12/11/6/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i>Next</a>
+  
+  
+    <a href="/2014/12/03/3/" class="alignright next">Prev<i class="fa fa-long-arrow-right"></i></a>
+  
+  <div class="clearfix"></div>
+</nav>
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+
+
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div>
+  
+  &copy; 2014 Charley
+  
+</div>
+Powered by <a href="http://zespia.tw/hexo/" title="Hexo" target="_blank" rel="external">Hexo</a> and <a href="http://pages.github.com/" title="GitHub Pages" target="_blank" rel="external">GitHub Pages</a>
+
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery.imagesloaded.min.js" type="text/javascript"></script>
+<script src="/js/gallery.js" type="text/javascript"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">
+var disqus_shortname = 'Charley1991';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox({
+      'titlePosition': 'inside'
+    });
+  })(jQuery);
+  </script>
+
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>
